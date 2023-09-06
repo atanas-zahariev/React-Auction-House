@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
 
 export default function Owner({ item }) {
-    //console.log(item);
+    console.log(item);
 
-    const bider = item.item.bider?._id === item.user._id;
+    const bider = item.item.bider;
+
     //console.log(bider);
     return (
         <section id="catalog-section">
@@ -36,7 +37,7 @@ export default function Owner({ item }) {
                             <div>                               
                                 {bider ?
                                     <div>
-                                        Bid by <strong>bider.firstname</strong>
+                                        Bid by <strong>{item.item.bider.firstname} {item.item.bider.lastname}</strong>
                                         <Link className="action pad-med cta" href="/house/userAction/{{item._id}}">Close Auction</Link>
                                     </div> :
                                     <div>
@@ -48,11 +49,8 @@ export default function Owner({ item }) {
                     </div>
                 </div>
 
-                <footer>
-                    {bider ?
-                    <div>Listed by {item.item.bider.firstname} {item.item.bider.lastname}</div>
-                    :'Listed by Peter Jakson'
-                    }
+                <footer>                  
+                    <div>Listed by {item.user.username} </div>                                      
                 </footer>
             </div>
 
