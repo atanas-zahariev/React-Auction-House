@@ -28,6 +28,7 @@ itemControler.post('/create',  async (req, res) => {
 
 itemControler.get('/catalog', async (req, res) => {
     let items = await getAllItem();
+    console.log(items)
     items = items.filter(x => x.description != 'isClosed')
     const obj = {
         items,

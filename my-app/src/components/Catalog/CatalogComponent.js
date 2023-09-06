@@ -1,21 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getAllDataInSystem } from '../../services/data';
 import { Item } from './ItemComponent';
+import { ErrorContext } from '../../contexts/ErrorContext';
 
 export default function Catalog() {
-    const [items, setItems] = useState([]);
+    const { getError } = useContext(ErrorContext);
+    const [items, setItems] = useState({});
 
     useEffect(() => {
-        getAllDataInSystem().then(result => {
-            setItems(items => [...items, result]);
-        });
-    }, []);
-   
+
+        async function fetchData() {
+            try {
+                const result = await getAllDataInSystem();
+                setItems(items => ({ ...items, result }));
+            } catch (error) {
+                getError(['Something happened, please try again later']);
+            }
+        }
+        fetchData();
+    }, [getError]);
+    console.log(items);
     return (
         <section id="catalog-section" className="spaced">
-            {items.length > 0 ?
+            {items.result ?
                 <ul className="catalog cards">
-                   {items[0].items.map(x => <Item key={x._id} x={x}/>)}
+                    {items.result.items.map(x => <Item key={x._id} {...x} />)}
                 </ul> :
                 <div className="item pad-large align-center">
                     <p>Nothing has been listed yet. Be the first!</p>

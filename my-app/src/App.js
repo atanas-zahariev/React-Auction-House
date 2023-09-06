@@ -10,6 +10,7 @@ import Logout from './components/LogoutComponent';
 import Error from './components/ErrorComponent';
 import Register from './components/RegisterComponent';
 import Catalog from './components/Catalog/CatalogComponent';
+import Details from './components/details/DetailsComponent';
 
 function App() {
   
@@ -26,6 +27,7 @@ function App() {
               <Route path='/logout' element={<Logout />} />
               <Route path='/register' element={<Register />} />
               <Route path='/catalog' element={<Catalog />} />
+              <Route path='/details/:id' element={<Details />} />
             </Routes>
           </main>
 
