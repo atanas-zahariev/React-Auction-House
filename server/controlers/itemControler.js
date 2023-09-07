@@ -107,7 +107,7 @@ itemControler.get('/userAction/:id', async (req, res) => {
     try {
         await closeOffer(req.params.id)
 
-        res.end()
+        res.status(204).end()
     } catch (error) {
         const message = errorParser(error);
         res.status(401).json(message)

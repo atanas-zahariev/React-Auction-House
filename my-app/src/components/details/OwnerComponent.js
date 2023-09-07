@@ -3,9 +3,6 @@ import { Link } from 'react-router-dom';
 export default function Owner({ item }) {
     const { title, imgUrl, category, description, price, bider, _id } = item.item;
 
-    //const bider = item.item.bider;
-
-    //console.log(bider);
     return (
         <section id="catalog-section">
 

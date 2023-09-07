@@ -10,7 +10,8 @@ const endpoints = {
     addInSysten: '/house/create',
     edit:'/house/edit/',
     delete:'/house/delete/',
-    closed : '/house/closed'
+    closed : '/house/closed',
+    action:'/house/userAction/'
 };
 
 export async function login(data) {
@@ -67,7 +68,7 @@ export async function getTotalAction() {
     return result;
 }
 
-export async function getUserAction() {
-    const result = await get('');
+export async function getUserAction(id) {
+    const result = await get(endpoints.action + id);
     return result;
 }
