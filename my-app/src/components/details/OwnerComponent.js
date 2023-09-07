@@ -1,19 +1,19 @@
 import { Link } from 'react-router-dom';
 
 export default function Owner({ item }) {
-    console.log(item);
+    const { title, imgUrl, category, description, price, bider, _id } = item.item;
 
-    const bider = item.item.bider;
+    //const bider = item.item.bider;
 
     //console.log(bider);
     return (
         <section id="catalog-section">
 
             <h1 className="item">
-                {item.item.title}
+                {title}
                 <div className="f-right">
-                    <Link className="action pad-small f-left" href="/house/edit/{{item._id}}">Edit</Link>
-                    <Link className="action pad-small f-left" href="/house/delete/{{item._id}}">Delete</Link>
+                    <Link to={`/edit/${_id}`} className="action pad-small f-left" >Edit</Link>
+                    <Link to={`/delete/${_id}`} className="action pad-small f-left" >Delete</Link>
                 </div>
             </h1>
             <div className="item padded">
@@ -21,24 +21,24 @@ export default function Owner({ item }) {
                 <div className="layout right large">
 
                     <div className="col">
-                        <img src={item.item.imgUrl} className="img-large" alt="" />
+                        <img src={imgUrl} className="img-large" alt="" />
                     </div>
 
                     <div className="content pad-med">
 
-                        <p>In category: <strong>{item.item.category}</strong></p>
-                        <p>Description</p>
+                        <p>In category: <strong>{category}</strong></p>
+                        <p>{description}</p>
 
                         <div className="align-center">
                             <div>
-                                Current price: $<strong>{item.item.price}</strong>
+                                Current price: $<strong>{price}</strong>
                             </div>
 
-                            <div>                               
+                            <div>
                                 {bider ?
                                     <div>
-                                        Bid by <strong>{item.item.bider.firstname} {item.item.bider.lastname}</strong>
-                                        <Link className="action pad-med cta" href="/house/userAction/{{item._id}}">Close Auction</Link>
+                                        Bid by <strong>{bider.firstname} {bider.lastname}</strong>
+                                        <Link to={`/userAction/${_id}`} className="action pad-med cta">Close Auction</Link>
                                     </div> :
                                     <div>
                                         No bids
@@ -49,8 +49,8 @@ export default function Owner({ item }) {
                     </div>
                 </div>
 
-                <footer>                  
-                    <div>Listed by {item.user.username} </div>                                      
+                <footer>
+                    <div>Listed by {item.user.username} </div>
                 </footer>
             </div>
 

@@ -1,45 +1,86 @@
+import { useContext, useState } from 'react';
+import { ErrorContext } from '../../contexts/ErrorContext';
+import { offer } from '../../services/data';
+import { useNavigate } from 'react-router-dom';
+
 export default function NotOwner({ item }) {
-    console.log(item);
-    const user = item.user?._id;
-    const bider = item.item.bider?._id === user;
-    console.log(bider);
+    const { user } = item;
+
+    const { title, imgUrl, category, description, price, bider, _id } = item.item;
+    
+    const { getError, cleanError } = useContext(ErrorContext);
+
+    const navigate = useNavigate();
+
+    const currentUser = user?._id;
+
+    const isBider = bider?._id === currentUser;
+
+    const [newOffer, setOffer] = useState({
+        price: ''
+    });
+
+    function getOffer(e) {
+        setOffer(() => ({ ...newOffer, [e.target.name]: e.target.value }));
+    }
+
+    async function onSubmit(e) {
+        e.preventDefault();
+
+        if (Number(newOffer.price) <= 0) {
+            getError(['Price must be greather than zero']);
+            return;
+        }
+
+        if (Number(newOffer.price) < price) {
+            getError(['You bid must be higher, see the existing one.']);
+            return;
+        }
+
+        try {
+            item.item.price = Number(newOffer.price);
+            await offer(_id, item.item);
+            cleanError();
+            navigate(`/details/${_id}`);
+        } catch (error) {
+            getError(error);
+        }
+    }
+
     return (
         <section id="catalog-section">
 
             <h1 className="item">
-                {item.item.title}
+                {title}
             </h1>
             <div className="item padded">
 
                 <div className="layout right large">
 
                     <div className="col">
-                        <img src={item.item.imgUrl} className="img-large" alt="" />
+                        <img src={imgUrl} className="img-large" alt="" />
                     </div>
 
                     <div className="content pad-med">
 
-                        <p>In category: <strong>{item.item.category}</strong></p>
-                        <p>Description</p>
+                        <p>In category: <strong>{category}</strong></p>
+                        <p>{description}</p>
 
                         <div className="align-center">
                             <div>
-                                Current price: $<strong>{item.item.price}</strong>
+                                Current price: $<strong>{price}</strong>
                             </div>
 
-                            {/* <!-- If current user is the bidder --> */}
-                            {/* {{ #if username }} */}
-                            {/* {{ #if currentHigherOffer }} */}
-                            {user ?
+                            {currentUser ?
                                 <div>
-                                    {bider ?
-                                    <div>
-                                        You are currently the <strong>highest bidder</strong> for this auction
-                                    </div>:
-                                    <form className="vertical" method="get">
-                                        <label><span>Bid amount</span><input type="number" name="price" /></label>
-                                        <input className="action" type="submit" value="Place bid" />
-                                    </form>
+                                    {isBider ?
+                                        <div>
+                                            You are currently the <strong>highest bidder</strong> for this auction
+                                        </div> :
+                                        <form className="vertical" onSubmit={onSubmit}>
+                                            <label><span>Bid amount</span><input type="number" name="price" onChange={getOffer} /></label>
+                                            <input className="action" type="submit" value="Place bid" />
+                                        </form>
                                     }
                                 </div> :
                                 null
@@ -52,9 +93,9 @@ export default function NotOwner({ item }) {
 
                 <footer>
                     {user ?
-                    <div>Listed by {item.user.username} </div>
-                    :null
-                }
+                        <div>Listed by {user.username} </div>
+                        : null
+                    }
                 </footer>
             </div>
 

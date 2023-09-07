@@ -7,7 +7,10 @@ const endpoints = {
     logout: '/auth/logout',
     getAllDataInSistem: '/house/catalog',
     getSpecificDataWithId: '/house/details/',
-    addInSysten: ''
+    addInSysten: '/house/create',
+    edit:'/house/edit/',
+    delete:'/house/delete/',
+    closed : '/house/closed'
 };
 
 export async function login(data) {
@@ -35,8 +38,13 @@ export async function getSpecificDataWithId(id) {
     return result;
 }
 
+export async function offer(id,data){
+    const result = await post(endpoints.getSpecificDataWithId + id, data);
+    return result;
+}
+
 export async function onEdit(id, data) {
-    const result = await put(endpoints.getSpecificDataWithId + id, data);
+    const result = await put(endpoints.edit + id, data);
     return result;
 }
 
@@ -46,7 +54,7 @@ export async function addInSystem(data) {
 }
 
 export async function onDelete(id) {
-    const result = await del(endpoints.getSpecificDataWithId + id);
+    const result = await del(endpoints.delete + id);
     return result;
 }
 
@@ -54,12 +62,12 @@ export async function makeAction(specificId) {
     await post({ specificId });
 }
 
-export async function getTotalAction(specificId) {
-    const result = await get('');
+export async function getTotalAction() {
+    const result = await get(endpoints.closed);
     return result;
 }
 
-export async function getUserAction(specificId, userId) {
+export async function getUserAction() {
     const result = await get('');
     return result;
 }

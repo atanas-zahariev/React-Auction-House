@@ -11,6 +11,8 @@ import Error from './components/ErrorComponent';
 import Register from './components/RegisterComponent';
 import Catalog from './components/Catalog/CatalogComponent';
 import Details from './components/details/DetailsComponent';
+import CloseOffer from './components/CloseOfferComponent';
+import UserClosedOffers from './components/UserClosedOffersComponent';
 
 function App() {
   
@@ -28,6 +30,8 @@ function App() {
               <Route path='/register' element={<Register />} />
               <Route path='/catalog' element={<Catalog />} />
               <Route path='/details/:id' element={<Details />} />
+              <Route path='/closed' element={<UserClosedOffers />} />
+              <Route path='/userAction/:id' element={<CloseOffer />} />
             </Routes>
           </main>
 
