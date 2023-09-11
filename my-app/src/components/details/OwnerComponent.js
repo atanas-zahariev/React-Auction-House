@@ -13,6 +13,7 @@ export default function Owner({ item }) {
                     <Link to={`/delete/${_id}`} className="action pad-small f-left" >Delete</Link>
                 </div>
             </h1>
+            
             <div className="item padded">
 
                 <div className="layout right large">

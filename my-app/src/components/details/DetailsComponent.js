@@ -6,11 +6,17 @@ import NotOwner from './NotOwnerComponent';
 import Owner from './OwnerComponent';
 
 export default function Details() {
-    const { getError } = useContext(ErrorContext);
+    const { getError,cleanError } = useContext(ErrorContext);
 
     const { id } = useParams();
 
     const [item, setItem] = useState({});
+    useEffect(() => {
+
+        cleanError();
+    },
+        // eslint-disable-next-line
+        []);
 
     useEffect(() => {
 
@@ -27,6 +33,11 @@ export default function Details() {
 
     }, [getError, id]);
 
+    async function setNewState() {
+        const result = await getSpecificDataWithId(id);
+        setItem(result);
+    }
+
     if (item.item) {
         const isOwner = item.item.owner === item.user?._id;
         if (isOwner) {
@@ -35,7 +46,7 @@ export default function Details() {
             );
         }
         return (
-            <NotOwner item={item} />
+            <NotOwner item={item} setNewState={setNewState}/>
         );
 
     }

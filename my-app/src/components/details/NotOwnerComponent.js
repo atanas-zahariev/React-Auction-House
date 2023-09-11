@@ -3,7 +3,7 @@ import { ErrorContext } from '../../contexts/ErrorContext';
 import { offer } from '../../services/data';
 import { useNavigate } from 'react-router-dom';
 
-export default function NotOwner({ item }) {
+export default function NotOwner({ item,setNewState }) {
     const { user } = item;
 
     const { title, imgUrl, category, description, price, bider, _id } = item.item;
@@ -15,7 +15,7 @@ export default function NotOwner({ item }) {
     const currentUser = user?._id;
 
     const isBider = bider?._id === currentUser;
-
+    
     const [newOffer, setOffer] = useState({
         price: ''
     });
@@ -40,6 +40,7 @@ export default function NotOwner({ item }) {
         try {
             item.item.price = Number(newOffer.price);
             await offer(_id, item.item);
+            await setNewState(_id);
             cleanError();
             navigate(`/details/${_id}`);
         } catch (error) {

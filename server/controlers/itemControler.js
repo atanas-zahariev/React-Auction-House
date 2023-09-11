@@ -71,7 +71,7 @@ itemControler.post('/details/:id',  async (req, res) => {
 
 
 itemControler.post('/edit/:id',  async (req, res) => {
-
+    
     const { title, category, imgUrl, price, description } = req.body;
 
     const edited = {
@@ -84,7 +84,7 @@ itemControler.post('/edit/:id',  async (req, res) => {
 
     try {
         await editItem(req.params.id, edited)
-        res.end()
+        res.status(204).end()
     } catch (error) {
         const message = errorParser(error);
         res.status(401).json(message)
@@ -96,7 +96,7 @@ itemControler.get('/delete/:id', async (req, res) => {
     try {
         await deleteItem(req.params.id);
 
-        res.end();
+        res.status(204).end();
     } catch (error) {
         const message = errorParser(error);
         res.status(401).json(message)

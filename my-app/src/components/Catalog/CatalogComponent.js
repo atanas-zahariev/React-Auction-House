@@ -4,8 +4,14 @@ import { Item } from './ItemComponent';
 import { ErrorContext } from '../../contexts/ErrorContext';
 
 export default function Catalog() {
-    const { getError } = useContext(ErrorContext);
+    const { getError,cleanError } = useContext(ErrorContext);
     const [items, setItems] = useState({});
+
+    useEffect(() => {
+
+        cleanError();
+        // eslint-disable-next-line
+    },[]);
 
     useEffect(() => {
 
@@ -19,7 +25,7 @@ export default function Catalog() {
         }
         fetchData();
     }, [getError]);
-    console.log(items);
+   
     return (
         <section id="catalog-section" className="spaced">
             {items.result ?

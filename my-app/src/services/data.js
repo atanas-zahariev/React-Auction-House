@@ -1,5 +1,5 @@
 import { clearUser, setUserData } from './utility.js';
-import { del, get, post, put } from './api.js';
+import { del, get, post} from './api.js';
 
 const endpoints = {
     login: '/auth/login',
@@ -45,9 +45,9 @@ export async function offer(id,data){
 }
 
 export async function onEdit(id, data) {
-    const result = await put(endpoints.edit + id, data);
+    const result = await post(endpoints.edit + id, data);
     return result;
-}
+};
 
 export async function addInSystem(data) {
     const result = await post(endpoints.addInSysten, data);

@@ -19,8 +19,9 @@ export default function UserClosedOffers() {
 
         fetchData();
     }, [getError]);
+    
     const { items } = offers;
-    console.log(items);
+    
     return (
         <section id="catalog-section" className="spaced">
 

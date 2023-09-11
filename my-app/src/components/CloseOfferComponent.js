@@ -16,8 +16,7 @@ export default function CloseOffer() {
             await getUserAction(id);
             navigate('/closed');
         } catch (error) {
-            //getError(error);
-            console.log(error);
+            getError(error);
         }
     }
     fetchData();

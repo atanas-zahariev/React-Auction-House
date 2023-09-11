@@ -13,30 +13,39 @@ import Catalog from './components/Catalog/CatalogComponent';
 import Details from './components/details/DetailsComponent';
 import CloseOffer from './components/CloseOfferComponent';
 import UserClosedOffers from './components/UserClosedOffersComponent';
+import EditItem from './components/EditItemComponent';
+import Create from './components/CreateComponent';
+import { ItemsProvider } from './contexts/itemsContext';
 
 function App() {
-  
+
   return (
     <AuthProvider>
       <ErrorProvider>
-        <div id="page-content">
-          <Header />
-          <Error />
-          <main>
-            <Routes>
-              <Route path='/' element={<Home />} />
-              <Route path='/login' element={<Login />} />
-              <Route path='/logout' element={<Logout />} />
-              <Route path='/register' element={<Register />} />
-              <Route path='/catalog' element={<Catalog />} />
-              <Route path='/details/:id' element={<Details />} />
-              <Route path='/closed' element={<UserClosedOffers />} />
-              <Route path='/userAction/:id' element={<CloseOffer />} />
-            </Routes>
-          </main>
+        <ItemsProvider>
+          <div id="page-content">
+            <Header />
+            <Error />
+            <main>
+              <Routes>
+                <Route path='/' element={<Home />} />
+                <Route path='/login' element={<Login />} />
+                <Route path='/logout' element={<Logout />} />
+                <Route path='/register' element={<Register />} />
 
-          <footer>SoftUni &copy; 2022 | Design by Viktor Kostadinov</footer>
-        </div>
+                <Route path='/create' element={<Create />} />
+                <Route path='/catalog' element={<Catalog />} />
+                <Route path='/details/:id' element={<Details />} />
+                <Route path='/closed' element={<UserClosedOffers />} />
+                <Route path='/userAction/:id' element={<CloseOffer />} />
+                <Route path='/edit/:id' element={<EditItem />} />
+
+              </Routes>
+            </main>
+
+            <footer>SoftUni &copy; 2022 | Design by Viktor Kostadinov</footer>
+          </div>
+        </ItemsProvider>
       </ErrorProvider>
     </AuthProvider>
   );
