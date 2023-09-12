@@ -1,5 +1,6 @@
 import { useContext, useEffect } from 'react';
 import { ErrorContext } from '../contexts/ErrorContext';
+import { Link } from 'react-router-dom';
 
 export default function Home() {
     const { cleanError } = useContext(ErrorContext);
@@ -31,8 +32,8 @@ export default function Home() {
                         </p>
 
                         <div className="align-center">
-                            <a className="action" href="/house/catalog">Browse Listings</a>
-                            <a className="action" href="/house/create">Publish Auction</a>
+                            <Link className="action" to="/catalog">Browse Listings</Link>
+                            <Link className="action" to="/create">Publish Auction</Link>
                         </div>
                     </div>
                 </div>

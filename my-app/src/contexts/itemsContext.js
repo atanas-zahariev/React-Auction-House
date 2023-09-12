@@ -2,12 +2,15 @@ import { createContext, useCallback, useContext, useEffect, useState } from 'rea
 import { useNavigate } from 'react-router-dom';
 import { addInSystem, getAllDataInSystem } from '../services/data';
 import { ErrorContext } from './ErrorContext';
+import {AuthContext} from './AuthContext';
 
 export const ItemsContext = createContext();
 
 export const ItemsProvider = ({
     children,
 }) => {
+   const {onLogout} = useContext(AuthContext);
+
     const navigate = useNavigate();
 
     const [incomingItems, setItems] = useState({});
@@ -23,8 +26,15 @@ export const ItemsProvider = ({
             const result = await getAllDataInSystem();
             setItems(result);
         } catch (error) {
+            if (error[0] === 'Invalid authorization token') {
+                localStorage.clear();
+                onLogout();
+                navigate('/login');
+                return;
+            }
             getError(['Something happened, please try again later']);
         }
+        // eslint-disable-next-line
     },[getError,]);
 
     useEffect(() => {
@@ -38,6 +48,12 @@ export const ItemsProvider = ({
             navigate('/catalog');
             setItems((state) => ({ items: [...state.items, result], ...state.user }));
         } catch (error) {
+            if (error[0] === 'Invalid authorization token') {
+                localStorage.clear();
+                onLogout();
+                navigate('/login');
+                return;
+            }
             getError(error);
         }
     };

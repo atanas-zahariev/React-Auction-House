@@ -1,5 +1,6 @@
 import { clearUser, getUser } from './utility.js';
 
+
 const host = 'http://localhost:3030';
 
 async function request(method, url, data) {
@@ -43,7 +44,6 @@ async function request(method, url, data) {
 
 
     } catch (error) {
-
         throw error;
     }
 }

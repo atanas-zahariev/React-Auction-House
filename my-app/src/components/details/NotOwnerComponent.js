@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import { ErrorContext } from '../../contexts/ErrorContext';
 import { offer } from '../../services/data';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../contexts/AuthContext';
 
 export default function NotOwner({ item,setNewState }) {
     const { user } = item;
@@ -9,6 +10,7 @@ export default function NotOwner({ item,setNewState }) {
     const { title, imgUrl, category, description, price, bider, _id } = item.item;
     
     const { getError, cleanError } = useContext(ErrorContext);
+    const {onLogout} = useContext(AuthContext);
 
     const navigate = useNavigate();
 
@@ -44,6 +46,12 @@ export default function NotOwner({ item,setNewState }) {
             cleanError();
             navigate(`/details/${_id}`);
         } catch (error) {
+            if (error[0] === 'Invalid authorization token') {
+                localStorage.clear();
+                onLogout();
+                navigate('/login');
+                return;
+            }
             getError(error);
         }
     }

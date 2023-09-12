@@ -25,8 +25,9 @@ export async function register(data) {
 }
 
 export async function logout() {
-    get(endpoints.logout);
+   const result =  get(endpoints.logout);
     clearUser();
+    return result;
 }
 
 export async function getAllDataInSystem() {
@@ -60,7 +61,8 @@ export async function onDelete(id) {
 }
 
 export async function makeAction(specificId) {
-    await post({ specificId });
+    const result = await post({ specificId });
+    return result;
 }
 
 export async function getTotalAction() {

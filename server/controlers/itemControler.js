@@ -38,7 +38,6 @@ itemControler.get('/catalog', async (req, res) => {
 });
 
 itemControler.get('/details/:id',async (req, res) => {
-    console.log('details')
     try {
         const item = await getItemById(req.params.id);
         const obj = {

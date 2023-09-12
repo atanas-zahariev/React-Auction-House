@@ -15,7 +15,7 @@ authControler.post('/register',
             const { email, firstname, lastname, password, repass } = req.body;
 
             const { errors } = validationResult(req);
-            
+
             if (errors.length > 0) {
                 throw errors;
             }
@@ -33,8 +33,8 @@ authControler.post('/register',
             res.json(token);
 
         } catch (error) {
-          const message = errorParser(error);
-          res.status(400).json(message);
+            const message = errorParser(error);
+            res.status(400).json(message);
         }
 
     });
@@ -44,7 +44,7 @@ authControler.post('/register',
 authControler.post('/login', async (req, res) => {
     try {
         const token = await login(req.body.email, req.body.password);
-        res.json(token);      
+        res.json(token);
     } catch (error) {
         const message = errorParser(error);
         res.status(401).json(message);

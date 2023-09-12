@@ -16,6 +16,7 @@ import UserClosedOffers from './components/UserClosedOffersComponent';
 import EditItem from './components/EditItemComponent';
 import Create from './components/CreateComponent';
 import { ItemsProvider } from './contexts/itemsContext';
+import { AuthGuard } from './guards/UserGuard';
 
 function App() {
 
@@ -29,16 +30,19 @@ function App() {
             <main>
               <Routes>
                 <Route path='/' element={<Home />} />
-                <Route path='/login' element={<Login />} />
-                <Route path='/logout' element={<Logout />} />
-                <Route path='/register' element={<Register />} />
-
-                <Route path='/create' element={<Create />} />
                 <Route path='/catalog' element={<Catalog />} />
                 <Route path='/details/:id' element={<Details />} />
-                <Route path='/closed' element={<UserClosedOffers />} />
-                <Route path='/userAction/:id' element={<CloseOffer />} />
-                <Route path='/edit/:id' element={<EditItem />} />
+
+                <Route path='/login' element={<Login />} />
+                <Route path='/register' element={<Register />} />
+
+                <Route element={<AuthGuard />}>
+                  <Route path='/logout' element={<Logout />} />
+                  <Route path='/create' element={<Create />} />
+                  <Route path='/closed' element={<UserClosedOffers />} />
+                  <Route path='/userAction/:id' element={<CloseOffer />} />
+                  <Route path='/edit/:id' element={<EditItem />} />
+                </Route>
 
               </Routes>
             </main>
