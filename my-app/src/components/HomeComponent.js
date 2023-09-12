@@ -6,9 +6,10 @@ export default function Home() {
     useEffect(() => {
 
         cleanError();
-    },
         // eslint-disable-next-line
-        []);
+    }, []);
+        
+       
 
     return (
         <section id="catalog-section">

@@ -38,6 +38,7 @@ itemControler.get('/catalog', async (req, res) => {
 });
 
 itemControler.get('/details/:id',async (req, res) => {
+    console.log('details')
     try {
         const item = await getItemById(req.params.id);
         const obj = {
@@ -93,6 +94,8 @@ itemControler.post('/edit/:id',  async (req, res) => {
 
 
 itemControler.get('/delete/:id', async (req, res) => {
+    console.log('delete');
+
     try {
         await deleteItem(req.params.id);
 

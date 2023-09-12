@@ -32,7 +32,7 @@ export default function NotOwner({ item,setNewState }) {
             return;
         }
 
-        if (Number(newOffer.price) < price) {
+        if (Number(newOffer.price) <= price) {
             getError(['You bid must be higher, see the existing one.']);
             return;
         }

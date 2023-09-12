@@ -1,7 +1,33 @@
-import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ErrorContext } from '../../contexts/ErrorContext';
+import { onDelete } from '../../services/data';
 
 export default function Owner({ item }) {
-    const { title, imgUrl, category, description, price, bider, _id } = item.item;
+    const navigate = useNavigate();
+    const{getError} = useContext(ErrorContext);
+
+    const { title, imgUrl, category, description, price, bider, _id,owner } = item.item;
+
+    const {user} = item;
+
+    async function deleteItem(){
+        try {            
+            if (!user || (user._id !== owner)) {
+                navigate('/login');
+                return;
+            }
+
+            const confirmed = window.confirm(`Are you sure you want to delete ${title}`);
+
+            if(confirmed){
+                await onDelete(_id);
+                navigate('/catalog');
+            }
+        } catch (error) {
+            getError(error);
+        }
+    }
 
     return (
         <section id="catalog-section">
@@ -10,7 +36,7 @@ export default function Owner({ item }) {
                 {title}
                 <div className="f-right">
                     <Link to={`/edit/${_id}`} className="action pad-small f-left" >Edit</Link>
-                    <Link to={`/delete/${_id}`} className="action pad-small f-left" >Delete</Link>
+                    <button onClick={deleteItem}  className="action pad-small f-left" >Delete</button>
                 </div>
             </h1>
             

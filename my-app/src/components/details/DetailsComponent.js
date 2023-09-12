@@ -14,9 +14,10 @@ export default function Details() {
     useEffect(() => {
 
         cleanError();
-    },
         // eslint-disable-next-line
-        []);
+    }, []);
+        
+       
 
     useEffect(() => {
 

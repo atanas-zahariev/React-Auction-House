@@ -19,9 +19,10 @@ export default function Login() {
     useEffect(() => {
 
         cleanError();
-    },
         // eslint-disable-next-line
-        []);
+    },[]);
+        
+        
 
     function getFormValue(e) {
         setValues(state => ({ ...state, [e.target.name]: e.target.value }));

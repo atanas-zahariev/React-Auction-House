@@ -28,9 +28,10 @@ export default function EditItem() {
     useEffect(() => {
 
         cleanError();
-    },
         // eslint-disable-next-line
-        []);
+    }, []);
+        
+       
 
     useEffect(() => {
         async function fetchData() {

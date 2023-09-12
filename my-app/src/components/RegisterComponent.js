@@ -22,9 +22,10 @@ export default function Register() {
     useEffect(() => {
 
         cleanError();
-    },
         // eslint-disable-next-line
-        []);
+    },[]);
+        
+        
 
     function getFormValue(e) {
         setValues(state => ({ ...state, [e.target.name]: e.target.value }));

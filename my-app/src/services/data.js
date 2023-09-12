@@ -1,5 +1,5 @@
 import { clearUser, setUserData } from './utility.js';
-import { del, get, post} from './api.js';
+import { get, post} from './api.js';
 
 const endpoints = {
     login: '/auth/login',
@@ -55,7 +55,7 @@ export async function addInSystem(data) {
 }
 
 export async function onDelete(id) {
-    const result = await del(endpoints.delete + id);
+    const result = await get(endpoints.delete + id);
     return result;
 }
 
