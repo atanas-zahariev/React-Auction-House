@@ -1,13 +1,13 @@
 import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ErrorContext } from '../../contexts/ErrorContext';
-import { onDelete } from '../../services/data';
-import { AuthContext } from '../../contexts/AuthContext';
+import { DataContext } from '../../contexts/DataContext';
+//import { onDelete } from '../../services/data';
 
 export default function Owner({ item }) {
     const navigate = useNavigate();
     const{getError} = useContext(ErrorContext);
-    const {onLogout} = useContext(AuthContext);
+    const {onDelete} = useContext(DataContext);
 
 
     const { title, imgUrl, category, description, price, bider, _id,owner } = item.item;
@@ -28,12 +28,6 @@ export default function Owner({ item }) {
                 navigate('/catalog');
             }
         } catch (error) {
-            if (error[0] === 'Invalid authorization token') {
-                localStorage.clear();
-                onLogout();
-                navigate('/login');
-                return;
-            }
             getError(error);
         }
     }

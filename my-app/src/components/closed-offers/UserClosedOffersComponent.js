@@ -1,10 +1,14 @@
 import { useContext, useEffect, useState } from 'react';
-import { getTotalAction } from '../services/data';
-import { ErrorContext } from '../contexts/ErrorContext';
-import FinishedOffers from './FinushedOffersComponent';
+import FinishedOffers from './FinishedOffersComponent';
+
+import { ErrorContext } from '../../contexts/ErrorContext';
+import { DataContext } from '../../contexts/DataContext';
 
 export default function UserClosedOffers() {
     const { getError } = useContext(ErrorContext);
+
+    const { getTotalAction } = useContext(DataContext);
+    
     const [offers, setOffers] = useState({});
 
     useEffect(() => {
@@ -18,10 +22,11 @@ export default function UserClosedOffers() {
         }
 
         fetchData();
+        // eslint-disable-next-line
     }, [getError]);
-    
+
     const { items } = offers;
-    
+
     return (
         <section id="catalog-section" className="spaced">
 

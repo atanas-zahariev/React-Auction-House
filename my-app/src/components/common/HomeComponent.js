@@ -1,9 +1,11 @@
 import { useContext, useEffect } from 'react';
-import { ErrorContext } from '../contexts/ErrorContext';
 import { Link } from 'react-router-dom';
+
+import { ErrorContext } from '../../contexts/ErrorContext';
 
 export default function Home() {
     const { cleanError } = useContext(ErrorContext);
+
     useEffect(() => {
 
         cleanError();

@@ -1,28 +1,26 @@
 import { useContext, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import { ErrorContext } from '../contexts/ErrorContext';
-import { getSpecificDataWithId, onEdit } from '../services/data';
+import { ErrorContext } from '../../contexts/ErrorContext';
+import { DataContext } from '../../contexts/DataContext';
 
-export default function EditItem() {
+export default function Create() {
     const { getError, cleanError } = useContext(ErrorContext);
-
-    const { id } = useParams();
-
+    
     const navigate = useNavigate();
 
-    const arrOfCategories = ['vehicles', ' real', 'estate', 'electronics', 'furniture', 'other'];
+    const {addInSystem} = useContext(DataContext);
 
     const IMAGE_URL = /^https?:\/\/.*/i;
 
-    const [oldItem, setOldItem] = useState({
-        _id: '',
+    const arrOfCategories = ['vehicles', ' real', 'estate', 'electronics', 'furniture', 'other'];
+
+    const [values, setValues] = useState({
         title: '',
-        category: '',
+        category: 'estate',
         imgUrl: '',
         price: '',
         description: '',
-        bider: undefined
     });
 
     useEffect(() => {
@@ -30,40 +28,19 @@ export default function EditItem() {
         cleanError();
         // eslint-disable-next-line
     }, []);
-        
-       
-
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const result = await getSpecificDataWithId(id);
-                const { item, user } = result;
-                if (!user || (user._id !== item.owner)) {
-                    navigate('/login');
-                    return;
-                }
-                setOldItem(result.item);
-            } catch (error) {
-                getError(error);
-            }
-        }
-
-        fetchData();
-
-    }, [getError, id, navigate]);
 
 
 
     const changeHandler = (e) => {
-        setOldItem(state => ({ ...state, [e.target.name]: e.target.value }));
+        setValues(state => ({ ...state, [e.target.name]: e.target.value }));
     };
 
     async function onSubmit(e) {
         e.preventDefault();
 
-        const { title, category, imgUrl, price, description } = oldItem;
+        const { title, category, imgUrl, price, description } = values;
 
-        if (Object.values(oldItem).some(x => x === '')) {
+        if (Object.values(values).some(x => x === '')) {
             getError(['All fields are required.']);
             return;
         }
@@ -103,34 +80,31 @@ export default function EditItem() {
             };
         }
 
-
         try {
-            await onEdit(id, oldItem);
+            await addInSystem(values);
             cleanError();
-            navigate(`/details/${id}`);
+            navigate('/catalog');
         } catch (error) {
             getError(error);
         }
     }
 
     return (
-        <section id="create-section">
+        <section id="create-section" className="">
 
-            <h1 className="item">Edit Auction</h1>
+            <h1 className="item">New Auction</h1>
 
             <div className="item padded align-center">
 
-                <form className="layout left large" onSubmit={onSubmit} >
+                <form className="layout left large" onSubmit={onSubmit}>
 
                     <div className="col aligned">
                         <label>
                             <span>Title</span>
-                            <input type="text" name="title" value={oldItem.title} onChange={changeHandler} />
-                        </label>
-
+                            <input type="text" name="title" onChange={changeHandler} /></label>
                         <label>
                             <span>Category</span>
-                            <select name="category" value={oldItem.category} onChange={changeHandler} >
+                            <select name="category" value={values.category} onChange={changeHandler}>
                                 <option value="estate">Real Estate</option>
                                 <option value="vehicles">Vehicles</option>
                                 <option value="furniture">Furniture</option>
@@ -138,29 +112,22 @@ export default function EditItem() {
                                 <option value="other">Other</option>
                             </select>
                         </label>
-
                         <label>
                             <span>Image URL</span>
-                            <input type="text" name="imgUrl" value={oldItem.imgUrl} onChange={changeHandler} />
-                        </label>
-
+                            <input type="text" name="imgUrl" onChange={changeHandler} /></label>
                         <label>
                             <span>Starting price</span>
-                            <input type="number" name="price"
-                                value={oldItem.price}
-                                onChange={changeHandler}
-                                disabled={(oldItem.bider) ? 'disabled' : ''} />
-                        </label>
+                            <input type="number" name="price" onChange={changeHandler} /></label>
                     </div>
 
                     <div className="content pad-med align-center vertical">
                         <label>
                             <span>Description</span>
-                            <textarea name="description" value={oldItem.description} onChange={changeHandler}></textarea>
+                            <textarea name="description" onChange={changeHandler}></textarea>
                         </label>
 
                         <div className="align-center">
-                            <input className="action" type="submit" value="Update Listing" />
+                            <input className="action" type="submit" value="Publish Item" />
                         </div>
                     </div>
 

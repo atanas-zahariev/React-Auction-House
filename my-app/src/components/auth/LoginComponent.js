@@ -1,14 +1,16 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { AuthContext } from '../contexts/AuthContext';
-import { ErrorContext } from '../contexts/ErrorContext';
+import { AuthContext } from '../../contexts/AuthContext';
+import { ErrorContext } from '../../contexts/ErrorContext';
+import { DataContext } from '../../contexts/DataContext';
 
-import { login } from '../services/data';
+//import { login } from '../services/data';
 
 export default function Login() {
     const { onLoginSubmit } = useContext(AuthContext);
     const { getError,cleanError} = useContext(ErrorContext);
+    const {login} = useContext(DataContext);
     const [values, setValues] = useState({
         email: '',
         password: ''

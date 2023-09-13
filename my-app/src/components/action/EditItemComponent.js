@@ -1,22 +1,30 @@
 import { useContext, useEffect, useState } from 'react';
-import { ErrorContext } from '../contexts/ErrorContext';
-import { ItemsContext } from '../contexts/itemsContext';
+import { useNavigate, useParams } from 'react-router-dom';
 
-export default function Create() {
+import { ErrorContext } from '../../contexts/ErrorContext';
+import { DataContext } from '../../contexts/DataContext';
+
+export default function EditItem() {
     const { getError, cleanError } = useContext(ErrorContext);
-    
-    const { createItem } = useContext(ItemsContext);
 
-    const IMAGE_URL = /^https?:\/\/.*/i;
+    const { getSpecificDataWithId, onEdit } = useContext(DataContext);
+
+    const { id } = useParams();
+
+    const navigate = useNavigate();
 
     const arrOfCategories = ['vehicles', ' real', 'estate', 'electronics', 'furniture', 'other'];
 
-    const [values, setValues] = useState({
+    const IMAGE_URL = /^https?:\/\/.*/i;
+
+    const [oldItem, setOldItem] = useState({
+        _id: '',
         title: '',
-        category: 'estate',
+        category: '',
         imgUrl: '',
         price: '',
         description: '',
+        bider: undefined
     });
 
     useEffect(() => {
@@ -27,16 +35,37 @@ export default function Create() {
 
 
 
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const result = await getSpecificDataWithId(id);
+                const { item, user } = result;
+                if (!user || (user._id !== item.owner)) {
+                    navigate('/login');
+                    return;
+                }
+                setOldItem(result.item);
+            } catch (error) {
+                getError(error);
+            }
+        }
+
+        fetchData();
+        // eslint-disable-next-line
+    }, [getError, id, navigate]);
+
+
+
     const changeHandler = (e) => {
-        setValues(state => ({ ...state, [e.target.name]: e.target.value }));
+        setOldItem(state => ({ ...state, [e.target.name]: e.target.value }));
     };
 
     async function onSubmit(e) {
         e.preventDefault();
 
-        const { title, category, imgUrl, price, description } = values;
+        const { title, category, imgUrl, price, description } = oldItem;
 
-        if (Object.values(values).some(x => x === '')) {
+        if (Object.values(oldItem).some(x => x === '')) {
             getError(['All fields are required.']);
             return;
         }
@@ -76,25 +105,34 @@ export default function Create() {
             };
         }
 
-        await createItem(values);
+
+        try {
+            await onEdit(id, oldItem);
+            cleanError();
+            navigate(`/details/${id}`);
+        } catch (error) {
+            getError(error);
+        }
     }
 
     return (
-        <section id="create-section" className="">
+        <section id="create-section">
 
-            <h1 className="item">New Auction</h1>
+            <h1 className="item">Edit Auction</h1>
 
             <div className="item padded align-center">
 
-                <form className="layout left large" onSubmit={onSubmit}>
+                <form className="layout left large" onSubmit={onSubmit} >
 
                     <div className="col aligned">
                         <label>
                             <span>Title</span>
-                            <input type="text" name="title" onChange={changeHandler} /></label>
+                            <input type="text" name="title" value={oldItem.title} onChange={changeHandler} />
+                        </label>
+
                         <label>
                             <span>Category</span>
-                            <select name="category" value={values.category} onChange={changeHandler}>
+                            <select name="category" value={oldItem.category} onChange={changeHandler} >
                                 <option value="estate">Real Estate</option>
                                 <option value="vehicles">Vehicles</option>
                                 <option value="furniture">Furniture</option>
@@ -102,22 +140,29 @@ export default function Create() {
                                 <option value="other">Other</option>
                             </select>
                         </label>
+
                         <label>
                             <span>Image URL</span>
-                            <input type="text" name="imgUrl" onChange={changeHandler} /></label>
+                            <input type="text" name="imgUrl" value={oldItem.imgUrl} onChange={changeHandler} />
+                        </label>
+
                         <label>
                             <span>Starting price</span>
-                            <input type="number" name="price" onChange={changeHandler} /></label>
+                            <input type="number" name="price"
+                                value={oldItem.price}
+                                onChange={changeHandler}
+                                disabled={(oldItem.bider) ? 'disabled' : ''} />
+                        </label>
                     </div>
 
                     <div className="content pad-med align-center vertical">
                         <label>
                             <span>Description</span>
-                            <textarea name="description" onChange={changeHandler}></textarea>
+                            <textarea name="description" value={oldItem.description} onChange={changeHandler}></textarea>
                         </label>
 
                         <div className="align-center">
-                            <input className="action" type="submit" value="Publish Item" />
+                            <input className="action" type="submit" value="Update Listing" />
                         </div>
                     </div>
 

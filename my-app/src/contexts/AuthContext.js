@@ -1,5 +1,7 @@
 import { createContext } from 'react';
+
 import { useAuthHook } from '../hooks/authHook';
+
 import { getUser } from '../services/utility';
 
 export const AuthContext = createContext();

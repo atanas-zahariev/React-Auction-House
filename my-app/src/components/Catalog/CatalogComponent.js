@@ -1,43 +1,36 @@
 import { useContext, useEffect, useState } from 'react';
-import { getAllDataInSystem } from '../../services/data';
+
 import { Item } from './ItemComponent';
 
 import { ErrorContext } from '../../contexts/ErrorContext';
-import {AuthContext} from '../../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+
+import { DataContext } from '../../contexts/DataContext';
 
 export default function Catalog() {
-    const { getError,cleanError } = useContext(ErrorContext);
-   const {onLogout} = useContext(AuthContext);
-   const navigate = useNavigate();
+    const { getError, cleanError } = useContext(ErrorContext);
+
+    const { getAllDataInSystem } = useContext(DataContext);
 
     const [items, setItems] = useState({});
 
+    
+    
     useEffect(() => {
-
         cleanError();
-        // eslint-disable-next-line
-    },[]);
-
-    useEffect(() => {
 
         async function fetchData() {
             try {
                 const result = await getAllDataInSystem();
                 setItems(items => ({ ...items, result }));
-            } catch (error) {
-                if (error[0] === 'Invalid authorization token') {
-                    localStorage.clear();
-                    onLogout();
-                    navigate('/login');
-                    return;
-                }
+            } catch (error) {              
                 getError(['Something happened, please try again later']);
             }
         }
+        
         fetchData();
-    }, [getError, navigate, onLogout]);
-   
+        // eslint-disable-next-line
+    }, [getError]);
+
     return (
         <section id="catalog-section" className="spaced">
             {items.result ?
